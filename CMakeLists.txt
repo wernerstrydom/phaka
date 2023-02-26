@@ -12,19 +12,42 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(src)
 
-if(WINDOWS)
-    set(CPACK_GENERATOR "ZIP")
-    set(CPACK_SYSTEM_NAME "windows")
-    set(CPACK_PACKAGE_ARCHITECTURE "amd64")
-elseif(APPLE)
-    set(CPACK_GENERATOR "ZIP;TGZ")
-    set(CPACK_SYSTEM_NAME "darwin")
-    set(CPACK_PACKAGE_ARCHITECTURE "amd64")
-elseif(UNIX)
-    set(CPACK_GENERATOR "ZIP;TGZ")
-    set(CPACK_SYSTEM_NAME "linux")
-    set(CPACK_PACKAGE_ARCHITECTURE "amd64")
+include(InstallRequiredSystemLibraries)
+
+message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
+
+find_program(PHAKA_EXECUTABLE phaka
+        HINTS ${CMAKE_BINARY_DIR}/bin /usr/local/bin /usr/bin /bin /opt/bin /opt/local/bin /opt/phaka/bin
+        NO_DEFAULT_PATH)
+
+if(PHAKA_EXECUTABLE)
+    message(STATUS "Found phaka: ${PHAKA_EXECUTABLE}")
+    execute_process(COMMAND ${PHAKA_EXECUTABLE} arch
+            OUTPUT_VARIABLE CPACK_PACKAGE_ARCHITECTURE
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+    execute_process(COMMAND ${PHAKA_EXECUTABLE} system
+            OUTPUT_VARIABLE CPACK_SYSTEM_NAME
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+    # this allows us to bootstrap the build process
+    set(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME})
+    set(CPACK_PACKAGE_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
 endif()
+
+message(STATUS "CPACK_SYSTEM_NAME: ${CPACK_SYSTEM_NAME}")
+message(STATUS "CPACK_PACKAGE_ARCHITECTURE: ${CPACK_PACKAGE_ARCHITECTURE}")
+
+if (CPACK_SYSTEM_NAME STREQUAL "linux")
+    set(CPACK_GENERATOR "ZIP;TGZ")
+elseif (CPACK_SYSTEM_NAME STREQUAL "darwin")
+    set(CPACK_GENERATOR "ZIP;TGZ")
+elseif (CPACK_SYSTEM_NAME STREQUAL "windows")
+    set(CPACK_GENERATOR "ZIP")
+else()
+    set(CPACK_GENERATOR "ZIP")
+endif ()
 
 set (CPACK_VERBATIM_VARIABLES           YES)
 set (CPACK_INCLUDE_TOPLEVEL_DIRECTORY   OFF)
