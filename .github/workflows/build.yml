@@ -7,10 +7,20 @@ on:
         required: false
         type: string
         default: 'Release'
+      runner:
+        description: 'The machine to run on'
+        required: false
+        type: string
+        default: 'ubuntu-latest'
+      artifact_name:
+        description: 'The name of the artifact to upload'
+        required: false
+        type: string
+        default: 'linux'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{inputs.runner}}
     steps:
       - uses: actions/checkout@v3
 
@@ -60,5 +70,5 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: linux
+          name: ${{inputs.artifact_name}}
           path: ${{github.workspace}}/build/artifacts/*

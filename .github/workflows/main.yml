@@ -13,3 +13,12 @@ jobs:
   build_linux:
     name: "Linux"
     uses: ./.github/workflows/build.yml
+    with:
+      runner: ubuntu-latest
+      artifact_name: linux
+  build_macos:
+    name: "macOS"
+    uses: ./.github/workflows/build.yml
+    with:
+      runner: macos-latest
+      artifact_name: macos
