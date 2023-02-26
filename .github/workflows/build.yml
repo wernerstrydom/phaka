@@ -38,7 +38,7 @@ jobs:
 
       - name: Package
         working-directory: ${{github.workspace}}/build
-        run:  cpack --config CPackConfig.cmake -C ${{inputs.build_type}} -G ZIP --verbose
+        run:  cpack --config CPackConfig.cmake -C ${{inputs.build_type}} --verbose
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
