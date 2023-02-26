@@ -22,3 +22,9 @@ jobs:
     with:
       runner: macos-latest
       artifact_name: macos
+  build_windows:
+    name: "Windows"
+    uses: ./.github/workflows/build.yml
+    with:
+      runner: windows-latest
+      artifact_name: windows

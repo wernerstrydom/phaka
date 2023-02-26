@@ -27,16 +27,17 @@ jobs:
       # Phaka uses itself to build and configure itself
       - name: Bootstrap
         run: |
-          cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} 
-          cmake --build ${{github.workspace}}/build --config ${{inputs.build_type}} 
-          sudo cmake --install ${{github.workspace}}/build --config ${{inputs.build_type}} 
-          rm -Rf ${{github.workspace}}/build
+          cmake -B ${{github.workspace}}/bootstrap -DCMAKE_BUILD_TYPE=${{inputs.build_type}} --install-prefix ${{github.workspace}}
+          cmake --build ${{github.workspace}}/bootstrap --config ${{inputs.build_type}}
+          cmake --install ${{github.workspace}}/bootstrap --config ${{inputs.build_type}}
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
       # Verify that the bootstrap worked
       - name: Bootstrap Verification
-        run: phaka --version
+        shell: pwsh
+        working-directory: ${{github.workspace}}/bin/
+        run: ./phaka --version
 
       # Let's do the real build
       - name: Configure CMake

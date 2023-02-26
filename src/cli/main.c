@@ -11,33 +11,42 @@
 #error "Unsupported system"
 #endif
 
-#if defined(__x86_64__)
+#if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
 #define PHAKA_ARCH "amd64"
-#elif defined(__i386__)
+#endif
+
+#if defined(i386) || defined(__i386) || defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__) ||    \
+		defined(_M_I86) || defined(_M_IX86) || defined(__X86__) || defined(_X86_) || defined(__THW_INTEL__) ||                 \
+		defined(__I86__) || defined(__386)
 #define PHAKA_ARCH "i386"
-#elif defined(__arm__)
-#define PHAKA_ARCH "arm"
-#else
+#endif
+
+#ifndef PHAKA_ARCH
 #error "Unsupported architecture"
 #endif
 
-int main(int argc, char *argv[]) {
-  switch (argc) {
-  case 2:
-    if (strcmp(argv[1], "arch") == 0) {
-      printf("%s\n", PHAKA_ARCH);
-      return 0;
-    }
+int main(int argc, char* argv[])
+{
+	switch (argc)
+	{
+	case 2:
+		if (strcmp(argv[1], "arch") == 0)
+		{
+			printf("%s\n", PHAKA_ARCH);
+			return 0;
+		}
 
-    if (strcmp(argv[1], "system") == 0) {
-      printf("%s\n", PHAKA_SYSTEM);
-      return 0;
-    }
+		if (strcmp(argv[1], "system") == 0)
+		{
+			printf("%s\n", PHAKA_SYSTEM);
+			return 0;
+		}
 
-    if (strcmp(argv[1], "--version") == 0) {
-      printf("phaka 0.1.0\n");
-      return 0;
-    }
-  }
-  return 1;
+		if (strcmp(argv[1], "--version") == 0)
+		{
+			printf("phaka 0.1.0\n");
+			return 0;
+		}
+	}
+	return 1;
 }

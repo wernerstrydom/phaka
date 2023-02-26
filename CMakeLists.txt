@@ -18,7 +18,7 @@ message(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 message(STATUS "CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 
 find_program(PHAKA_EXECUTABLE phaka
-        HINTS ${CMAKE_BINARY_DIR}/bin /usr/local/bin /usr/bin /bin /opt/bin /opt/local/bin /opt/phaka/bin
+        HINTS ${CMAKE_SOURCE_DIR}/bin ${CMAKE_BINARY_DIR}/bin /usr/local/bin /usr/bin /bin /opt/bin /opt/local/bin /opt/phaka/bin
         NO_DEFAULT_PATH)
 
 if(PHAKA_EXECUTABLE)
