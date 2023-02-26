@@ -26,19 +26,19 @@ jobs:
           
     - name: Test
       working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
+      run: ctest -C ${{env.BUILD_TYPE}} --verbose
       env:
           BUILD_NUMBER: ${{ github.run_number }}
           
     - name: Install
       working-directory: ${{github.workspace}}/build
-      run: cmake --install . --config ${{env.BUILD_TYPE}}
+      run: cmake --install . --config ${{env.BUILD_TYPE}} --verbose
       env:
           BUILD_NUMBER: ${{ github.run_number }}
 
     - name: Package
       working-directory: ${{github.workspace}}/build
-      run:  cpack --config CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ZIP --verbose -B ${{github.workspace}}/packages
+      run:  cpack --config CPackConfig.cmake -C ${{env.BUILD_TYPE}} -G ZIP --verbose
       env:
         BUILD_NUMBER: ${{ github.run_number }}
 
@@ -46,4 +46,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: linux
-        path: ${{github.workspace}}/packages/*
+        path: ${{github.workspace}}/build/artifacts/*

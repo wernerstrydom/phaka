@@ -12,4 +12,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(src)
 
+# Sets the output paths so we can upload the packages to GitHub
+set (CPACK_OUTPUT_FILE_PREFIX "${CMAKE_BINARY_DIR}/artifacts")
 include(CPack)
