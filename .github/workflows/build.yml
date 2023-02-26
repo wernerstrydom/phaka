@@ -1,11 +1,12 @@
 name: build
 on:
   workflow_call:
-    build_type:
-      description: 'Build type'
-      required: false
-      type: string
-      default: 'Release'
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: false
+        type: string
+        default: 'Release'
 
 jobs:
   build:
