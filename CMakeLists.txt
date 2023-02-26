@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.24)
+
+project(Phaka
+        HOMEPAGE_URL "https://wernerstrydom.com"
+        DESCRIPTION "A tool to assist with release engineering"
+        VERSION "0.1.0"
+        LANGUAGES C)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+add_subdirectory(src)
