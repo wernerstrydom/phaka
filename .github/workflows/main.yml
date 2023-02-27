@@ -11,20 +11,60 @@ env:
 
 jobs:
   build_linux:
-    name: "Linux"
+    name: "linux-amd64"
     uses: ./.github/workflows/build.yml
     with:
       runner: ubuntu-latest
       artifact_name: linux
+  setup_linux_zip:
+    name: "linux-amd64-zip"
+    uses: ./.github/workflows/setup.yml
+    needs: build_linux
+    with:
+      runner: ubuntu-latest
+      artifact_name: linux
+      package_name: phaka-0.1.${{ github.run_number }}.0-linux-amd64.zip
+  setup_linux_tgz:
+    name: "linux-amd64-tgz"
+    uses: ./.github/workflows/setup.yml
+    needs: build_linux
+    with:
+      runner: ubuntu-latest
+      artifact_name: linux
+      package_name: phaka-0.1.${{ github.run_number }}.0-linux-amd64.tar.gz
   build_macos:
-    name: "macOS"
+    name: "darwin-amd64"
     uses: ./.github/workflows/build.yml
     with:
       runner: macos-latest
       artifact_name: macos
+  setup_darwin_zip:
+    name: "darwin-amd64-zip"
+    uses: ./.github/workflows/setup.yml
+    needs: build_macos
+    with:
+      runner: macos-latest
+      artifact_name: macos
+      package_name: phaka-0.1.${{ github.run_number }}.0-darwin-amd64.zip
+  setup_darwin_tgz:
+    name: "darwin-amd64-tgz"
+    uses: ./.github/workflows/setup.yml
+    needs: build_macos
+    with:
+      runner: macos-latest
+      artifact_name: macos
+      package_name: phaka-0.1.${{ github.run_number }}.0-darwin-amd64.tar.gz
   build_windows:
-    name: "Windows"
+    name: "windows-amd64"
     uses: ./.github/workflows/build.yml
     with:
       runner: windows-latest
       artifact_name: windows
+  setup_windows_zip:
+    name: "windows-amd64-zip"
+    uses: ./.github/workflows/setup.yml
+    needs: build_windows
+    with:
+      runner: windows-latest
+      artifact_name: windows
+      package_name: phaka-0.1.${{ github.run_number }}.0-windows-amd64.zip

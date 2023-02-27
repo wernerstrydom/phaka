@@ -1,4 +1,4 @@
-name: build
+name: Build
 on:
   workflow_call:
     inputs:
@@ -24,22 +24,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # Phaka uses itself to build and configure itself
       - name: Bootstrap
         run: |
           cmake -B ${{github.workspace}}/bootstrap -DCMAKE_BUILD_TYPE=${{inputs.build_type}} --install-prefix ${{github.workspace}}
-          cmake --build ${{github.workspace}}/bootstrap --config ${{inputs.build_type}}
-          cmake --install ${{github.workspace}}/bootstrap --config ${{inputs.build_type}}
+          cmake --build ${{github.workspace}}/bootstrap --config ${{inputs.build_type}} --target install
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
-      # Verify that the bootstrap worked
       - name: Bootstrap Verification
         shell: pwsh
-        working-directory: ${{github.workspace}}/bin/
-        run: ./phaka --version
+        run: bin/phaka --version
 
-      # Let's do the real build
       - name: Configure CMake
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{inputs.build_type}} --install-prefix ${{github.workspace}}/dist
         env:
@@ -50,15 +45,14 @@ jobs:
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
-      - name: Test
-        working-directory: ${{github.workspace}}/build
-        run: ctest -C ${{inputs.build_type}} --verbose
+      - name: Install
+        run: cmake --install ${{github.workspace}}/build --config ${{inputs.build_type}} --prefix ${{github.workspace}}/dist
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 
-      - name: Install
+      - name: Test
         working-directory: ${{github.workspace}}/build
-        run: cmake --install . --config ${{inputs.build_type}} --verbose
+        run: ctest -C ${{inputs.build_type}} --verbose
         env:
           BUILD_NUMBER: ${{ github.run_number }}
 

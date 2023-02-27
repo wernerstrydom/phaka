@@ -1,5 +1,10 @@
+// Licensed to Werner Strydom under one or more agreements.
+// Werner Strydom licenses this file to you under the MIT license.
+
+#include <version.h>
 #include <stdio.h>
 #include <string.h>
+
 
 #if defined(__linux__)
 #define PHAKA_SYSTEM "linux"
@@ -44,7 +49,7 @@ int main(int argc, char* argv[])
 
 		if (strcmp(argv[1], "--version") == 0)
 		{
-			printf("phaka 0.1.0\n");
+			printf("phaka %s\n", phaka_version());
 			return 0;
 		}
 	}
