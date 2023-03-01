@@ -11,17 +11,26 @@ env:
 
 jobs:
   #---------------------------------------------------------------------------------------------------------------------
+  # Documentation
+  #---------------------------------------------------------------------------------------------------------------------
+  build_docs:
+    name: "documentation"
+    uses: ./.github/workflows/build-docs.yml
+    with:
+      artifact_name: docs
+
+  #---------------------------------------------------------------------------------------------------------------------
   # Linux AMD64
   #---------------------------------------------------------------------------------------------------------------------
   build_linux:
     name: "linux-amd64"
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-platform.yml
     with:
       runner: ubuntu-latest
       artifact_name: linux
   setup_linux_zip:
     name: "linux-amd64-zip"
-    uses: ./.github/workflows/setup.yml
+    uses: ./.github/workflows/test-setup.yml
     needs: build_linux
     with:
       runner: ubuntu-latest
@@ -29,7 +38,7 @@ jobs:
       package_name: phaka-0.1.${{ github.run_number }}.0-linux-amd64.zip
   setup_linux_tgz:
     name: "linux-amd64-tgz"
-    uses: ./.github/workflows/setup.yml
+    uses: ./.github/workflows/test-setup.yml
     needs: build_linux
     with:
       runner: ubuntu-latest
@@ -40,13 +49,13 @@ jobs:
   #---------------------------------------------------------------------------------------------------------------------
   build_darwin_amd64:
     name: "darwin-amd64"
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-platform.yml
     with:
       runner: macos-latest
       artifact_name: macos
   setup_darwin_amd64_zip:
     name: "darwin-amd64-zip"
-    uses: ./.github/workflows/setup.yml
+    uses: ./.github/workflows/test-setup.yml
     needs: build_darwin_amd64
     with:
       runner: macos-latest
@@ -54,7 +63,7 @@ jobs:
       package_name: phaka-0.1.${{ github.run_number }}.0-darwin-amd64.zip
   setup_darwin_amd64_tgz:
     name: "darwin-amd64-tgz"
-    uses: ./.github/workflows/setup.yml
+    uses: ./.github/workflows/test-setup.yml
     needs: build_darwin_amd64
     with:
       runner: macos-latest
@@ -65,13 +74,13 @@ jobs:
   #---------------------------------------------------------------------------------------------------------------------
   build_darwin_arm64:
     name: "darwin-arm64"
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-platform.yml
     with:
       runner: self-hosted
       artifact_name: macos_arm64
   setup_darwin_arm64_zip:
     name: "darwin-arm64-zip"
-    uses: ./.github/workflows/setup.yml
+    uses: ./.github/workflows/test-setup.yml
     needs: build_darwin_arm64
     with:
       runner: self-hosted
@@ -79,7 +88,7 @@ jobs:
       package_name: phaka-0.1.${{ github.run_number }}.0-darwin-arm64.zip
   setup_darwin_arm64_tgz:
     name: "darwin-arm64-tgz"
-    uses: ./.github/workflows/setup.yml
+    uses: ./.github/workflows/test-setup.yml
     needs: build_darwin_arm64
     with:
       runner: self-hosted
@@ -90,13 +99,13 @@ jobs:
   #---------------------------------------------------------------------------------------------------------------------
   build_windows:
     name: "windows-amd64"
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build-platform.yml
     with:
       runner: windows-latest
       artifact_name: windows
   setup_windows_zip:
     name: "windows-amd64-zip"
-    uses: ./.github/workflows/setup.yml
+    uses: ./.github/workflows/test-setup.yml
     needs: build_windows
     with:
       runner: windows-latest
