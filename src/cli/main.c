@@ -26,6 +26,15 @@
 #define PHAKA_ARCH "i386"
 #endif
 
+#if defined(__arm__) || defined(__TARGET_ARCH_ARM) || defined(__TARGET_ARCH_THUMB) || defined(_ARM) || defined(_M_ARM) ||     \
+		defined(_M_ARMT) || defined(__arm)
+#define PHAKA_ARCH "arm"
+#endif
+
+#if defined(__aarch64__)
+#define PHAKA_ARCH "arm64"
+#endif
+
 #ifndef PHAKA_ARCH
 #error "Unsupported architecture"
 #endif

@@ -22,6 +22,11 @@ jobs:
   build:
     runs-on: ${{inputs.runner}}
     steps:
+      - name: Clean up
+        shell: pwsh
+        run: |
+          Remove-Item -Path ${{github.workspace}} -Recurse -Force -ErrorAction Ignore
+
       - uses: actions/checkout@v3
 
       - name: Bootstrap
@@ -67,3 +72,9 @@ jobs:
         with:
           name: ${{inputs.artifact_name}}
           path: ${{github.workspace}}/build/artifacts/*
+
+      - name: Clean up
+        if: always()
+        shell: pwsh
+        run: |
+          Remove-Item -Path ${{github.workspace}} -Recurse -Force -ErrorAction Ignore

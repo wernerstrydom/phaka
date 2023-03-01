@@ -26,32 +26,27 @@ jobs:
           name: ${{inputs.artifact_name}}
           path: ${{github.workspace}}
 
-      - name: Print
-        run: |
-          echo "runner.os: ${{runner.os}}"
-          echo "inputs.artifact_name: ${{inputs.artifact_name}}"
-          echo "inputs.package_name: ${{inputs.package_name}}"
-          echo "inputs.runner: ${{inputs.runner}}"
-
       - name: Extract ZIP artifact (*nix)
         if: endsWith(inputs.package_name, '.zip') && runner.os != 'windows'
         run: |
-          unzip ${{inputs.package_name}} -d ${{github.workspace}}
+          unzip ${{inputs.package_name}} -d ${{runner.temp}}
 
       - name: Extract ZIP artifact (Windows)
         shell: pwsh
         if: endsWith(inputs.package_name, '.zip') && runner.os == 'windows'
         run: |
-          Expand-Archive -Path ${{inputs.package_name}} -DestinationPath ${{github.workspace}}
+          Expand-Archive -Path ${{inputs.package_name}} -DestinationPath ${{runner.temp}}
 
       - name: Extract TAR.GZ artifact (*nix)
         if: endsWith(inputs.package_name, '.tar.gz') && runner.os != 'windows'
         run: |
-          tar -xzf ${{inputs.package_name}} -C ${{github.workspace}}
+          tar -xzf ${{inputs.package_name}} -C ${{runner.temp}}
 
       - name: Run application
+        working-directory: ${{runner.temp}}
         shell: pwsh
         run: |
           ./bin/phaka --version
           ./bin/phaka arch
           ./bin/phaka system
+
