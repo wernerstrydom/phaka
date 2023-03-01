@@ -6,7 +6,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 
 configure_file(private-version.h.in private-version.h)
 
-add_library(sdk SHARED version.c version.h)
+add_library(sdk SHARED phaka.c phaka.h)
 
 include(GenerateExportHeader)
 generate_export_header(sdk BASE_NAME PHAKA EXPORT_FILE_NAME phaka_export.h EXPORT_MACRO_NAME PHAKA_API)
@@ -30,7 +30,7 @@ install(TARGETS sdk
 
 
 install(TARGETS sdk DESTINATION lib)
-install(FILES version.h DESTINATION include/phaka)
+install(FILES phaka.h DESTINATION include/phaka)
 
 
 
