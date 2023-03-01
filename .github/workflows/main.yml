@@ -10,6 +10,9 @@ env:
   BUILD_TYPE: Release
 
 jobs:
+  #---------------------------------------------------------------------------------------------------------------------
+  # Linux AMD64
+  #---------------------------------------------------------------------------------------------------------------------
   build_linux:
     name: "linux-amd64"
     uses: ./.github/workflows/build.yml
@@ -32,28 +35,59 @@ jobs:
       runner: ubuntu-latest
       artifact_name: linux
       package_name: phaka-0.1.${{ github.run_number }}.0-linux-amd64.tar.gz
-  build_macos:
+  #---------------------------------------------------------------------------------------------------------------------
+  # macOS AMD64
+  #---------------------------------------------------------------------------------------------------------------------
+  build_darwin_amd64:
     name: "darwin-amd64"
     uses: ./.github/workflows/build.yml
     with:
       runner: macos-latest
       artifact_name: macos
-  setup_darwin_zip:
+  setup_darwin_amd64_zip:
     name: "darwin-amd64-zip"
     uses: ./.github/workflows/setup.yml
-    needs: build_macos
+    needs: build_darwin_amd64
     with:
       runner: macos-latest
       artifact_name: macos
       package_name: phaka-0.1.${{ github.run_number }}.0-darwin-amd64.zip
-  setup_darwin_tgz:
+  setup_darwin_amd64_tgz:
     name: "darwin-amd64-tgz"
     uses: ./.github/workflows/setup.yml
-    needs: build_macos
+    needs: build_darwin_amd64
     with:
       runner: macos-latest
       artifact_name: macos
       package_name: phaka-0.1.${{ github.run_number }}.0-darwin-amd64.tar.gz
+  #---------------------------------------------------------------------------------------------------------------------
+  # macOS ARM64
+  #---------------------------------------------------------------------------------------------------------------------
+  build_darwin_arm64:
+    name: "darwin-arm64"
+    uses: ./.github/workflows/build.yml
+    with:
+      runner: self-hosted
+      artifact_name: macos_arm64
+  setup_darwin_arm64_zip:
+    name: "darwin-arm64-zip"
+    uses: ./.github/workflows/setup.yml
+    needs: build_darwin_arm64
+    with:
+      runner: self-hosted
+      artifact_name: macos_arm64
+      package_name: phaka-0.1.${{ github.run_number }}.0-darwin-arm64.zip
+  setup_darwin_arm64_tgz:
+    name: "darwin-arm64-tgz"
+    uses: ./.github/workflows/setup.yml
+    needs: build_darwin_arm64
+    with:
+      runner: self-hosted
+      artifact_name: macos_arm64
+      package_name: phaka-0.1.${{ github.run_number }}.0-darwin-arm64.tar.gz
+  #---------------------------------------------------------------------------------------------------------------------
+  # Windows AMD64
+  #---------------------------------------------------------------------------------------------------------------------
   build_windows:
     name: "windows-amd64"
     uses: ./.github/workflows/build.yml
