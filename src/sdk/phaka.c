@@ -7,8 +7,19 @@
 
 #include "phaka.h"
 #include "private-version.h"
+#include "private-platform.h"
 
 const char* phaka_version()
 {
 	return PHAKA_VERSION;
+}
+
+const char* phaka_system_name(void)
+{
+	return PHAKA_SYSTEM;
+}
+
+const char* phaka_system_arch(void)
+{
+	return PHAKA_ARCH;
 }
