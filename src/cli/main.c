@@ -27,6 +27,20 @@ int main(int argc, char* argv[])
 			printf("phaka %s\n", phaka_version());
 			return 0;
 		}
+
+		if (strcmp(argv[1], "server") == 0)
+		{
+			phaka_error_t *error = NULL;
+			phaka_server_t* server = phaka_server_new(9000);
+			phaka_server_run(server, &error);
+			if (error != NULL)
+			{
+				printf("Error: %s\n", phaka_error_message(error));
+				phaka_error_free(error);
+			}
+			phaka_server_free(server);
+			return 0;
+		}
 	}
 	return 1;
 }
