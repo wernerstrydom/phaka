@@ -29,18 +29,6 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: Install doxygen
-        if: runner.os == 'Linux'
-        run: sudo apt-get install doxygen
-
-      - name: Install doxygen
-        if: runner.os == 'Windows'
-        run: choco install doxygen.install
-
-      - name: Install doxygen
-        if: runner.os == 'macOS'
-        run: brew install doxygen
-
       - name: Bootstrap
         run: |
           cmake -B ${{github.workspace}}/bootstrap -DCMAKE_BUILD_TYPE=${{inputs.build_type}} --install-prefix ${{github.workspace}}

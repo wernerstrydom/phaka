@@ -1,0 +1,48 @@
+name: "Security Scan (Coverity Scan)"
+
+on:
+  schedule:
+    - cron: '0 19 * * *' # Daily at 19:00 UTC
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download Coverity Scan
+        run: |
+          wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_SCAN_TOKEN }}&project=wernerstrydom%2Fphaka" -O coverity_tool.tgz
+          wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COVERITY_SCAN_TOKEN }}&project=wernerstrydom%2Fphaka&md5=1" -O coverity_tool.md5
+
+      - name: Extract Coverity Scan
+        run: |
+          mkdir -p cov-analysis-linux64
+          tar xzf coverity_tool.tgz --strip 1 -C cov-analysis-linux64
+          ls -Ral
+
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release --install-prefix ${{github.workspace}}/dist -G "Unix Makefiles"
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+
+      - name: Build with cov-build
+        working-directory: ${{github.workspace}}/build
+        run: |
+          ${{github.workspace}}/cov-analysis-linux64/bin/cov-build --dir cov-int make
+
+      - name: Submit the result to Coverity Scan
+        working-directory: ${{github.workspace}}/build
+        run: |            
+            tar czvf phaka.tgz cov-int
+            curl --form token=${{ secrets.COVERITY_SCAN_TOKEN }} \
+            --form email=${{ secrets.COVERITY_SCAN_EMAIL }} \
+            --form file=@phaka.tgz \
+            --form version="0.1.${{ github.run_number }}" \
+            --form description="Prerelease" \
+            https://scan.coverity.com/builds?project=wernerstrydom%2Fphaka
+
